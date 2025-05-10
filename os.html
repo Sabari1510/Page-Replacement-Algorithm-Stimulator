@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Replacement Algorithm Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body data-theme="light">
+    <div class="container">
+        <header>
+            <h1>Page Replacement Algorithm Visualization</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm0-2c.28 0 .5-.22.5-.5v-3c0-.28-.22-.5-.5-.5s-.5.22-.5.5v3c0 .28.22.5.5.5zm0 14c-.28 0-.5.22-.5.5v3c0 .28.22.5.5.5s.5-.22.5-.5v-3c0-.28-.22-.5-.5-.5zm8.5-8.5c0-.28-.22-.5-.5-.5h-3c-.28 0-.5.22-.5.5s.22.5.5.5h3c.28 0 .5-.22.5-.5zm-14 0c0-.28-.22-.5-.5-.5h-3c-.28 0-.5.22-.5.5s.22.5.5.5h3c.28 0 .5-.22.5-.5zm12.02-5.9l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71.1.1.23.15.36.15.12 0 .25-.05.35-.15zm-14.99 15.02l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71.1.1.23.15.36.15.12 0 .25-.05.35-.15zm0-14.31c.2.2.51.2.71 0l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71zm14.99 14.31c.2.2.51.2.71 0l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71z"/>
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12.3 4.9c.4-.2.6-.7.5-1.1s-.6-.8-1.1-.8C6.8 3.1 3 7.1 3 12c0 5 4 9 9 9 3.8 0 7.1-2.4 8.4-5.9.2-.4 0-.9-.4-1.2-.4-.3-.9-.2-1.2.1-1 .9-2.3 1.4-3.7 1.4-3.1 0-5.7-2.5-5.7-5.7 0-1.9.9-3.7 2.6-4.8z"/>
+                </svg>
+            </button>
+        </header>
+
+        <section class="control-panel">
+            <div class="control-group">
+                <label for="algorithm">Algorithm</label>
+                <select id="algorithm">
+                    <option value="fifo">FIFO</option>
+                    <option value="optimal">Optimal</option>
+                    <option value="lru">LRU</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="frames">Frames</label>
+                <input type="number" id="frames" min="1" max="10" value="3">
+            </div>
+            <div class="control-group">
+                <label for="reference">Reference String</label>
+                <input type="text" id="reference" placeholder="e.g., 1,3,0,3,5,6,3">
+            </div>
+            <div class="control-group">
+                <label for="speed">Speed</label>
+                <select id="speed">
+                    <option value="slow">Slow (2s)</option>
+                    <option value="medium" selected>Medium (1s)</option>
+                    <option value="fast">Fast (0.5s)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <button class="button-primary" onclick="startSimulation()">Start Simulation</button>
+            </div>
+        </section>
+
+        <section class="examples-section">
+            <h2 class="section-title">Example Scenarios</h2>
+            <div class="examples-grid">
+                <button class="example-button" onclick="loadExample('fifo')">
+                    FIFO Basic
+                </button>
+                <button class="example-button" onclick="loadExample('fifo-belady')">
+                    FIFO Belady's Anomaly (3 frames)
+                </button>
+                <button class="example-button" onclick="loadExample('fifo-belady-4')">
+                    FIFO Belady's Anomaly (4 frames)
+                </button>
+                <button class="example-button" onclick="loadExample('optimal')">
+                    Optimal Algorithm
+                </button>
+                <button class="example-button" onclick="loadExample('lru')">
+                    LRU Algorithm
+                </button>
+            </div>
+        </section>
+
+        <section class="visualization-section">
+            <h2 class="section-title">Memory Frames</h2>
+            <div class="memory-frames" id="memoryFrame"></div>
+            <div class="queue-info" id="fifoQueue"></div>
+            <div class="stats-panel" id="faultStats"></div>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-title">Simulation Results</h2>
+            <div class="table-container">
+                <table id="visualTable" class="visual-table">
+                    <thead>
+                        <tr id="visualReference"></tr>
+                    </thead>
+                    <tbody id="visualFrames"></tbody>
+                    <tfoot>
+                        <tr id="hitMissRow"></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let memory = [];
+        let pageFaults = 0;
+        let referenceString = [];
+        let currentStep = 0;
+        let simulationHistory = [];
+        let fifoQueue = [];
+        let lruTimestamps = [];
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', newTheme);
+        }
+
+        function getSimulationDelay() {
+            const speed = document.getElementById('speed').value;
+            if (speed === 'slow') return 2000;
+            if (speed === 'fast') return 500;
+            return 1000; // Medium
+        }
+
+        function loadExample(example) {
+            document.getElementById('algorithm').value = example.startsWith('fifo') ? 'fifo' : example;
+            if (example === 'fifo') {
+                document.getElementById('frames').value = 3;
+                document.getElementById('reference').value = '1,3,0,3,5,6,3';
+            } else if (example === 'fifo-belady') {
+                document.getElementById('frames').value = 3;
+                document.getElementById('reference').value = '7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1';
+            } else if (example === 'fifo-belady-4') {
+                document.getElementById('frames').value = 4;
+                document.getElementById('reference').value = '7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1';
+            } else {
+                document.getElementById('frames').value = 4;
+                document.getElementById('reference').value = '7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1';
+            }
+        }
+
+        function startSimulation() {
+            const algorithm = document.getElementById('algorithm').value;
+            const frames = parseInt(document.getElementById('frames').value);
+            const refInput = document.getElementById('reference').value.split(',').map(Number);
+            referenceString = refInput.filter(n => !isNaN(n));
+            memory = new Array(frames).fill(null);
+            pageFaults = 0;
+            currentStep = 0;
+            simulationHistory = [];
+            fifoQueue = [];
+            lruTimestamps = new Array(frames).fill(0);
+            document.getElementById('fifoQueue').innerHTML = algorithm === 'fifo' ? '<span class="queue-label">FIFO Queue:</span> <span class="queue-content"></span>' : '';
+            document.getElementById('faultStats').innerHTML = '<span class="stats-value">Page Faults: 0</span>';
+            document.getElementById('visualReference').innerHTML = '';
+            document.getElementById('visualFrames').innerHTML = '';
+            document.getElementById('hitMissRow').innerHTML = '';
+            updateMemoryDisplay();
+            setTimeout(() => simulateStepByStep(algorithm), getSimulationDelay());
+        }
+
+        function updateMemoryDisplay(pageFault = false, changedIndex = -1) {
+            const memoryFrame = document.getElementById('memoryFrame');
+            memoryFrame.innerHTML = memory.map((page, i) => {
+                let classes = 'frame';
+                if (i === changedIndex) classes += ' active';
+                if (pageFault && i === changedIndex) classes += ' fault';
+                return `<div class="${classes}" id="frame${i}">${page !== null ? page : ''}</div>`;
+            }).join('');
+            if (document.getElementById('algorithm').value === 'fifo') {
+                const queueContent = document.querySelector('.queue-content');
+                if (queueContent) {
+                    queueContent.textContent = fifoQueue.map(page => page !== null ? page : '-').join(' → ');
+                } else {
+                    document.getElementById('fifoQueue').innerHTML = '<span class="queue-label">FIFO Queue:</span> <span class="queue-content">' + 
+                        fifoQueue.map(page => page !== null ? page : '-').join(' → ') + '</span>';
+                }
+            }
+        }
+
+        function updateFaultStats() {
+            const faultStats = document.getElementById('faultStats');
+            if (currentStep > 0) {
+                const totalSteps = simulationHistory.length;
+                const faultRate = (pageFaults / totalSteps * 100).toFixed(2);
+                faultStats.innerHTML = `
+                    <span class="stats-value">Page Faults: ${pageFaults}</span>
+                    <span class="stats-value">Fault Rate: ${faultRate}% (${pageFaults}/${totalSteps})</span>
+                `;
+            } else {
+                faultStats.innerHTML = `<span class="stats-value">Page Faults: ${pageFaults}</span>`;
+            }
+        }
+
+        function updateVisualTable() {
+            const visualReference = document.getElementById('visualReference');
+            const visualFrames = document.getElementById('visualFrames');
+            const hitMissRow = document.getElementById('hitMissRow');
+
+            // Update reference string row
+            if (currentStep === 1) {
+                visualReference.innerHTML = '<th>Reference</th>' + referenceString.map(page => `<th class="reference-string">${page}</th>`).join('');
+            }
+
+            // Update frame rows
+            const frames = parseInt(document.getElementById('frames').value);
+            let frameRows = new Array(frames).fill('');
+
+            for (let step = 0; step < simulationHistory.length; step++) {
+                const currentMemory = simulationHistory[step].memory;
+                const isHit = !simulationHistory[step].pageFault;
+
+                for (let i = 0; i < frames; i++) {
+                    let cellContent = '';
+                    if (isHit) {
+                        cellContent = '<td class="hit-cell">-</td>';
+                    } else {
+                        cellContent = `<td>${currentMemory[i] !== null ? currentMemory[i] : '-'}</td>`;
+                    }
+                    frameRows[i] += cellContent;
+                }
+            }
+
+            let frameHtml = '';
+            for (let i = 0; i < frames; i++) {
+                frameHtml += `<tr><td>Frame ${i + 1}</td>${frameRows[i]}</tr>`;
+            }
+            visualFrames.innerHTML = frameHtml;
+
+            // Update Hit/Miss row
+            let hitMissCells = '<td class="hit-miss-row">Hit/Miss</td>';
+            for (let step = 0; step < simulationHistory.length; step++) {
+                const isHit = !simulationHistory[step].pageFault;
+                hitMissCells += `<td class="hit-miss-row ${isHit ? 'hit' : 'miss'}">${isHit ? 'H' : 'M'}</td>`;
+            }
+            hitMissRow.innerHTML = hitMissCells;
+        }
+
+        function simulateStepByStep(algorithm) {
+            if (currentStep >= referenceString.length) {
+                updateFaultStats();
+                updateVisualTable();
+                if (algorithm === 'optimal') {
+                    const faultStats = document.getElementById('faultStats');
+                    faultStats.insertAdjacentHTML('afterend', '<div class="info-note">Note: Optimal algorithm is used as a benchmark but requires future knowledge.</div>');
+                }
+                return;
+            }
+
+            const page = referenceString[currentStep];
+            let pageFault = false;
+            let changedIndex = -1;
+
+            if (!memory.includes(page)) {
+                pageFault = true;
+                pageFaults++;
+                let indexToReplace;
+
+                if (memory.includes(null)) {
+                    indexToReplace = memory.indexOf(null);
+                    if (algorithm === 'fifo') {
+                        fifoQueue.push(page);
+                    }
+                } else {
+                    if (algorithm === 'fifo') {
+                        const oldestPage = fifoQueue.shift();
+                        indexToReplace = memory.indexOf(oldestPage);
+                        fifoQueue.push(page);
+                    } else if (algorithm === 'lru') {
+                        indexToReplace = lruTimestamps.indexOf(Math.min(...lruTimestamps));
+                    } else if (algorithm === 'optimal') {
+                        const futureUses = memory.map((p, idx) => {
+                            for (let j = currentStep + 1; j < referenceString.length; j++) {
+                                if (referenceString[j] === p) return { index: idx, next: j };
+                            }
+                            return { index: idx, next: Infinity };
+                        });
+                        indexToReplace = futureUses.sort((a, b) => b.next - a.next)[0].index;
+                    }
+                }
+
+                memory[indexToReplace] = page;
+                changedIndex = indexToReplace;
+                if (algorithm === 'lru') {
+                    lruTimestamps[indexToReplace] = currentStep + 1;
+                }
+            } else if (algorithm === 'lru') {
+                const index = memory.indexOf(page);
+                lruTimestamps[index] = currentStep + 1;
+            }
+
+            simulationHistory.push({
+                step: currentStep + 1,
+                page: page,
+                memory: [...memory],
+                pageFault: pageFault
+            });
+
+            updateMemoryDisplay(pageFault, changedIndex);
+            updateFaultStats();
+            updateVisualTable();
+
+            currentStep++;
+            setTimeout(() => simulateStepByStep(algorithm), getSimulationDelay());
+        }
+
+        // Initialize theme toggle
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    </script>
+</body>
+</html>
