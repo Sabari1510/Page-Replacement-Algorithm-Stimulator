@@ -10,7 +10,15 @@
 <body data-theme="light">
     <div class="container">
         <header>
-            <h1>Page Replacement Algorithm Visualization</h1>
+            <div class="title-block">
+                <h1>Page Replacement Algorithm Visualization</h1>
+                <p class="subtitle">Compare FIFO, LRU, and Optimal page replacement with step-by-step animation.</p>
+                <div class="badge-row" aria-hidden="true">
+                    <span class="badge">FIFO</span>
+                    <span class="badge">LRU</span>
+                    <span class="badge">Optimal</span>
+                </div>
+            </div>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm0-2c.28 0 .5-.22.5-.5v-3c0-.28-.22-.5-.5-.5s-.5.22-.5.5v3c0 .28.22.5.5.5zm0 14c-.28 0-.5.22-.5.5v3c0 .28.22.5.5.5s.5-.22.5-.5v-3c0-.28-.22-.5-.5-.5zm8.5-8.5c0-.28-.22-.5-.5-.5h-3c-.28 0-.5.22-.5.5s.22.5.5.5h3c.28 0 .5-.22.5-.5zm-14 0c0-.28-.22-.5-.5-.5h-3c-.28 0-.5.22-.5.5s.22.5.5.5h3c.28 0 .5-.22.5-.5zm12.02-5.9l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71.1.1.23.15.36.15.12 0 .25-.05.35-.15zm-14.99 15.02l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71.1.1.23.15.36.15.12 0 .25-.05.35-.15zm0-14.31c.2.2.51.2.71 0l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71zm14.99 14.31c.2.2.51.2.71 0l2.12-2.12c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-2.12 2.12c-.2.2-.2.51 0 .71z"/>
@@ -74,6 +82,11 @@
 
         <section class="visualization-section">
             <h2 class="section-title">Memory Frames</h2>
+            <div class="legend" aria-hidden="true">
+                <span class="legend-item"><span class="legend-swatch hit"></span>Hit</span>
+                <span class="legend-item"><span class="legend-swatch miss"></span>Miss</span>
+                <span class="legend-item"><span class="legend-swatch active"></span>Active Frame</span>
+            </div>
             <div class="memory-frames" id="memoryFrame"></div>
             <div class="queue-info" id="fifoQueue"></div>
             <div class="stats-panel" id="faultStats"></div>
@@ -93,6 +106,9 @@
                 </table>
             </div>
         </section>
+        <footer class="footer">
+            <span>Tip: Try the example scenarios to see Belady’s anomaly in FIFO.</span>
+        </footer>
     </div>
 
     <script>

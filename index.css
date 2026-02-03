@@ -60,6 +60,8 @@ body {
     min-height: 100vh;
     padding: 24px;
     transition: background-color 0.3s, color 0.3s;
+    background-image: radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246, 0.15), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(16, 185, 129, 0.12), transparent 60%);
 }
 
 /* Container and Layout */
@@ -79,6 +81,39 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+}
+
+.title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid var(--border);
 }
 
 
@@ -225,6 +260,44 @@ input[type="number"] {
     border-bottom: 1px solid var(--border);
 }
 
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 8px 0 16px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    background: var(--frame-bg);
+}
+
+.legend-swatch.hit {
+    background: var(--hit-bg);
+}
+
+.legend-swatch.miss {
+    background: var(--miss-bg);
+}
+
+.legend-swatch.active {
+    background: var(--frame-active);
+    border-color: var(--primary);
+}
+
 .memory-frames {
     display: flex;
     justify-content: center;
@@ -351,6 +424,13 @@ input[type="number"] {
     color: var(--text-primary);
 }
 
+.footer {
+    margin-top: 8px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     body {
@@ -367,6 +447,10 @@ input[type="number"] {
     
     h1 {
         font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: 0.8rem;
     }
     
     .memory-frames {
